@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-with-probe
+  label:
+    app: nginx
+  annotations:
+    description: belajar probe
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
+      livenessProbe: #pengecekan jika terjadi error atau pod tidak healthy maka pod akan segera di restart
+        httpGet: #memiliki tiga jenis yaitu httpGet, tcpSocket, exec{}
+          path: /health
+          port: 80
+        initialDelaySeconds: 0 #waktu setelah container jalan dan dilakukan pengecekan, default 0
+        periodSeconds: 10 #seberapa sering pengecekan dilakukan, default 10
+        timeoutSeconds: 1 #waktu timeout ketika pengecekan gagal, default 1
+        successThreshold: 1 #minimum dianggap sukses setelah terjadi failure, default 1
+        failureThreshold: 3 #minimum dianggap failure ketika terjadi gagal, default 3
+      redinessProbe: #pengecekan jika pod siap menerima traffic jika ada traffic yang timeout maka pod tersebut di stop untuk penerimaan traffic sampai traffic tersebut berhenti timeout
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 10
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+      startupProbe: #pengecekan apakah pod sudah berjalan, jika belum berjalan maka kubelet tidak akan melakukan pengecekan liveness dan rideness
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 10
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
