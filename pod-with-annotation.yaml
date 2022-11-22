@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: nginx-with-annotation
-  label:
+  labels:
     app: nginx
   annotations:
     annotation-key1: annotation-value1
