@@ -13,7 +13,7 @@ spec:
     #  label-key1: label-value1
     matchExpressions:
       - key: go
-        operator: in
+        operator: In
         values:
           - nginx-daemonset
   template:
