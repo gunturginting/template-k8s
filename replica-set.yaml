@@ -9,7 +9,7 @@ metadata:
 spec:
   replicas: 3
   selector:
-    matchlabels: #perbedaan replicaset dan replica controller
+    matchLabels: #perbedaan replicaset dan replica controller
       run: nginx 
   template:
     metadata:
