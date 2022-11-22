@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job
+  labels:
+    run: job
+  annotations:
+    description: belajar jobs
+spec:
+  completions: 5 #berapa kali job ingin dijalankan, default 1
+  parallelism: 2 #jumlah job yang dijalankan dalm bentuk pod, default 1
+  selector:
+    matchLabels:
+      run: job
+  template:
+    metadata:
+      name: job
+      labels:
+        run: job
+    spec:
+      restartPolicy: Never #wajib hukumnya jika di job
+      containers:
+        - name: job-nodejs
+          image: khannedy/nodejs-job
