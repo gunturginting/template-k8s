@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs-match-expression
+  labels:
+    test: rs-match-expression
+  annotations:
+    description: belajar replication set match expression
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:
+      - key: label-key
+        operator: In #ada 4 jenis operator match expression In,NotIn,Exists,NotExists
+        #In: value label harus ada di value in
+        #NotIn: value label tidak boleh ada di value in
+        #Exists: label harus ada
+        #NotExists: label tidak boleh ada
+        values:
+          - label-value
+  template:
+    metadata:
+      name: nginx
+      labels:
+        label-key: label-value
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+            successThreshold: 1 

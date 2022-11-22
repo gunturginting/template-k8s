@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    test: rs
+  annotations:
+    description: belajar replication set
+spec:
+  replicas: 3
+  selector:
+    matchlabels: #perbedaan replicaset dan replica controller
+      run: nginx 
+  template:
+    metadata:
+      name: nginx
+      labels:
+        run: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+            successThreshold: 1 
