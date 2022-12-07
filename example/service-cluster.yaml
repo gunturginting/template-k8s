@@ -1,0 +1,31 @@
+#Mengakses service menggunakan DNS : nama-service.nama-namespace.svc.cluster.local
+#Cluster IP: service yang hanya dapat diakses dari lokal pod atau lokal cluster kube
+#ExternalName: memetakan service ke externalName semisal domain example.com
+#NodePort: Mengekspos service pada setiap IP Node dan port yang sama
+#LoadBalancer: mengekspos service secara eksternal dengan menggunakan loadbalancer yang disediakan layanan cloud
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+  annotations:
+    description: Belajar Service Cluster IP
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 8080
+    targertPort: 80

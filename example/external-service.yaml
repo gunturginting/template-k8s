@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service-nginx
+  labels:
+    run: nginx
+spec:
+  type: ExternalName
+  externalName: example.com
+  ports:
+    - port: 80
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl
+  labels:
+    app: curl
+  annotations:
+    description: Belajar External Service
+spec:
+  containers:
+    - name: curl-nginx
+      image: khannedy/nginx-curl
