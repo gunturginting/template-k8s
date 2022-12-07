@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: sharing-volume
+  annotations:
+    description: Belajar Sharing Volume
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: sharing-volume
+  template:
+    metadata:
+      name: sharing-volume
+      labels:
+        name: sharing-volume
+    spec:
+      volumes:
+        - name: html
+          emptyDir: {}
+      containers:
+        - name: node-js
+          image: khannedy/nodejs-writer
+          volumeMounts:
+            - mountPath: /app/html
+              name: html
+        - name: nginx
+          image: nginx:1.14.2
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: html
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sharing-volume-service
+spec:
+  type: NodePort
+  selector:
+    name: sharing-volume
+  ports:
+    - port: 8080
+      targertPort: 80
+      nodePort: 30002

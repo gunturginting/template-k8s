@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multiple-container
+  labels:
+    name: multi-container
+  annotations:
+    description: Belajar Multiple Container
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 80
+    - name: node-js
+      image: khannedy/nodejs-web
+      ports:
+        - containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: multiple-service
+spec:
+  selector:
+    name: multi-container
+  ports:
+    - port: 8080
+      targertPort: 80
+      name: nginx
+    - port: 3000
+      targertPort: 3000
+      name: node-js
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl
+  labels:
+    name: curl
+spec:
+  containers:
+    - name: curl
+      image: khannedy/nginx-curl
