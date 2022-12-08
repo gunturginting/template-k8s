@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-js
+  labels:
+    run: node-js
+spec:
+  containers:
+    - name: node-js
+      image: khannedy/nodejs-writer
+      ports:
+        - containerPort: 80
+  volumes:
+    - name: html
+      emptyDir: {}
+      volumeMounts:
+        - mountPath: /app/folder-from-env
+          name: html
+      env:
+        - name: HTML_LOCATION
+          value: /app/folder-from-env

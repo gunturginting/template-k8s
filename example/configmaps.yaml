@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-js-config
+data:
+  APPLICATION: Bring Me The Horizon
+  VERSION: v1.0.0
+
+---
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nodejs-configmap
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: nodejs-configmap
+  template:
+    metadata:
+      name: nodejs-configmap
+      labels:
+        name: nodejs-configmap
+    spec:
+      containers:
+        - name: nodejs-configmap
+          image: khannedy/nodejs-env
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: node-js-config
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-configmap-service
+spec:
+  type: NodePort
+  selector:
+    name: nodejs-configmap
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30001
